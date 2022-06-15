@@ -16,7 +16,10 @@ export async function register(req: Request, res: Response) {
         name
     }).then(async (doc) => {
         sendToken(res, { email, name, adminId: String(doc._id) })
-    });
+    })
+        .catch((error) => {
+            res.status(400).send(error);
+        });
 }
 
 export async function login(req: Request, res: Response) {

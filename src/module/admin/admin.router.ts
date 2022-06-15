@@ -5,9 +5,8 @@ import multer from 'multer';
 
 export const router = Router();
 const upload = multer({ dest: 'uploads/' });
-router.use(isAuthorized);
 
 router.post('/register', register);
 router.post('/login', login);
-router.post('/upload', upload.single('image'), uploadFile);
+router.post('/upload', isAuthorized, upload.single('image'), uploadFile);
 

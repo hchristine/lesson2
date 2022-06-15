@@ -56,7 +56,7 @@ adminSchema.statics.register = function (info: AdminDocument) {
 
 adminSchema.statics.login = async function (payload: LoginCredentials) {
     const { email, password } = payload;
-    const admin = await Admin.findOne({ email })
+    const admin = await Admin.findOne({ email });
 
     if (!admin) {
         throw new Error("Not found.");
