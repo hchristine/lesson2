@@ -8,7 +8,7 @@
     box-sizing: border-box;
 }
 
-input[type=button]{
+input[type=button], #new-project{
     width: 10%;
     padding: 8px;
     margin: 10px 0;
@@ -26,4 +26,8 @@ div{
 
 .hide {
     display: none;
+}
+
+img {
+    width: 600px;
 }

@@ -18,7 +18,7 @@ export async function createProject(req: Request, res: Response) {
         res.status(201).json(project);
     }
     catch (error) {
-        res.status(404).send();
+        res.status(404).send(error);
     }
 }
 

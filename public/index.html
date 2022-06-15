@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,27 +8,36 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="login">
-    
+
         <label for="email">Email</label>
-        <input type="text" id="email" name="email" placeholder="EMAIL">
+        <input type="text" id="email" name="email" placeholder="Email">
 
         <label for="password">Password</label>
-        <input type="text" id="password" name="name"  placeholder="Password">
+        <input type="text" id="password" name="name" placeholder="Password">
 
         <input type="button" id="button" value="Submit">
 
     </div>
 
     <div id="projects-list" class="hide">
-        <h1>Hello World</h1>
+        <button id="new-project">Create project</button>
+
+    </div>
+
+    <div id="create-project" class="hide">
+        <input type="file" id="img" multiple>
+        <input type="text" id="title">
+        <button id="save-project">Save</button>
     </div>
 
 
 
     <script src="main.js"></script>
 
-    
+
 </body>
+
 </html>

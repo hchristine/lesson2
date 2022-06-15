@@ -1,15 +1,17 @@
 const loginPage = document.querySelector('#login');
 const projectsListPage = document.querySelector('#projects-list');
+const createProjectPage = document.querySelector('#create-project');
 
 // --------------------------------------------------
-const button = document.getElementById('button');
-const adminName = document.querySelector('#adminName');
+const loginButton = document.getElementById('button');
 const email = document.querySelector('#email');
 const password = document.querySelector('#password');
+const createProjectButton = document.querySelector('#new-project');
+const saveProjectButton = document.querySelector('#save-project');
 
 // --------------------------------------------------
 
-button.addEventListener('click', () => {
+loginButton.addEventListener('click', () => {
     const emailStr = email.value;
     const passwordStr = password.value;
 
@@ -30,16 +32,7 @@ button.addEventListener('click', () => {
             console.log(data);
             localStorage.setItem("token", data.token)
 
-            showProjectsList(); // ¯\_(ツ)_/¯ 
-            /**
-             * Inch arecinq
-             * 1. Nor block stexcecinq id=projects-list
-             * 2. JS um querySelector ov vekalecinq
-             * 3. CSS um nor class stexcecinq .hide { display: none; } // aysinqn en element@ ov es class@ uni - diplay: none; a aysinqn chi erevalu tex chi gravelu
-             * 4. Login ic heto then i mej kanchecinq showProjectsList() function@
-             * 5. showProjectsList function@ - login i elementin (block) avelacnuma hide class@ - (point 3) u projets-list block i vraic el hanecinq
-             * 6. That's all
-             */
+            showProjectsList();
         });
 });
 
@@ -53,6 +46,61 @@ function showProjectsList() {
         })
 }
 
+function showProjectCreatingPage() {
+    projectsListPage.classList.add('hide');
+    createProjectPage.classList.remove('hide');
+};
+
+createProjectButton.addEventListener('click', () => {
+    showProjectCreatingPage();
+});
+
+saveProjectButton.addEventListener('click', () => {
+    const files = document.getElementById('img').files;
+
+    const promises = [];
+    for (let i = 0; i < files.length; i++) {
+        const photo = files[i];
+        const formData = new FormData();
+        formData.append('image', photo);
+
+        const promise = fetch('/admin/upload', {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            },
+            method: "POST",
+            body: formData
+        })
+            .then((res) => res.json())
+
+        promises.push(promise);
+    }
+
+    Promise.all(promises)
+        .then((responses) => {
+            const photos = responses.map((photo) => photo.path);
+            const title = document.getElementById('title').value;
+            createProject(photos, title);
+        })
+});
+
+function createProject(photos, title) {
+    fetch('/projects', {
+        method: "POST",
+        headers: {
+            'Content-Type': "application/json",
+            Authorization: localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            title,
+            photos
+        })
+    })
+        .then(() => {
+
+        })
+}
+
 function getProjects() {
     return fetch('/projects', {
         headers: {
@@ -62,8 +110,6 @@ function getProjects() {
         .then((res) => {
             return res.json();
         })
-    //? TODO fetch projects from the backend
-    // convert it to JSON
 }
 
 function renderProjects(projects) {
@@ -80,17 +126,5 @@ function renderProjects(projects) {
 
         projectsListPage.appendChild(div);
     })
-
-
 }
-
-// fetch('/projects', {
-//     headers: {
-//         Authorization: localStorage.getItem("token")
-//     }
-// })
-//     .then((admin) => {
-//         console.log(admin);
-//     });
-
 
