@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Admin } from './admin.model';
 import { sendToken } from './utils';
 import cloudinary from 'cloudinary';
+import fs from 'fs';
 
 export async function register(req: Request, res: Response) {
     const { email, password, name } = req.body;
@@ -48,7 +49,12 @@ export function uploadFile(req: Request, res: Response) {
             return;
         }
         res.json({
-            path: result?.url
+            path: result!.url
         });
     })
+        .then(() => {
+            fs.rm('uploads/', { recursive: true }, () => {
+                console.log("deleted.")
+            });
+        });
 }

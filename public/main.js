@@ -1,6 +1,7 @@
 const loginPage = document.querySelector('#login');
 const projectsListPage = document.querySelector('#projects-list');
 const createProjectPage = document.querySelector('#create-project');
+const singleProject = document.getElementById('single-project');
 
 // --------------------------------------------------
 const loginButton = document.getElementById('button');
@@ -10,6 +11,18 @@ const createProjectButton = document.querySelector('#new-project');
 const saveProjectButton = document.querySelector('#save-project');
 
 // --------------------------------------------------
+if (location.search.includes("projectId")) {
+    const projectId = location.search.substring(11);
+    getById(projectId)
+        .then((project) => {
+            renderSingleProject(project);
+        });
+}
+else {
+    loginPage.classList.remove("hide");
+}
+
+
 
 loginButton.addEventListener('click', () => {
     const emailStr = email.value;
@@ -29,8 +42,7 @@ loginButton.addEventListener('click', () => {
             return res.json();
         })
         .then((data) => {
-            console.log(data);
-            localStorage.setItem("token", data.token)
+            localStorage.setItem("token", data.token);
 
             showProjectsList();
         });
@@ -96,13 +108,21 @@ function createProject(photos, title) {
             photos
         })
     })
-        .then(() => {
-
-        })
 }
 
 function getProjects() {
     return fetch('/projects', {
+        headers: {
+            Authorization: localStorage.getItem("token")
+        }
+    })
+        .then((res) => {
+            return res.json();
+        })
+}
+
+function getById(projectId) {
+    return fetch(`/projects/${projectId}`, {
         headers: {
             Authorization: localStorage.getItem("token")
         }
@@ -119,12 +139,23 @@ function renderProjects(projects) {
         const title = document.createElement('h3');
 
         title.innerHTML = project.title;
-        image.src = project.photos[1];
+        image.src = project.photos[0];
 
         div.appendChild(image);
         div.appendChild(title);
 
         projectsListPage.appendChild(div);
     })
+}
+
+function renderSingleProject(project) {
+    const div = document.createElement('div');
+    for (let i = 0; i < project.photos.length; i++) {
+        const image = document.createElement('img');
+        image.src = project.photos[i];
+
+        div.appendChild(image);
+        singleProject.appendChild(div);
+    }
 }
 

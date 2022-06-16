@@ -11,7 +11,7 @@ export async function createProject(req: Request, res: Response) {
         title
     });
     try {
-        const QRCode = await qrcode.toDataURL(`http://localhost:3000/${project._id}`);
+        const QRCode = await qrcode.toDataURL(`http://localhost:3000?projectId=${project._id}`);
         const cloudinaryImage = await cloudinary.v2.uploader.upload(QRCode);
         project.QR = cloudinaryImage.secure_url;
         await project.save();

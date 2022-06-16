@@ -3,9 +3,8 @@ import { isAuthorized } from "../../middlewares/isAuthorized";
 import { createProject, deleteProject, getById, getProjects } from "./project.handlers";
 
 export const router = Router();
-router.use(isAuthorized);
 
-router.post('/', createProject);
-router.get('/', getProjects);
+router.post('/', isAuthorized, createProject);
+router.get('/', isAuthorized, getProjects);
 router.get('/:id', getById);
-router.delete('/:id', deleteProject);
+router.delete('/:id', isAuthorized, deleteProject);
