@@ -1,10 +1,10 @@
-import { Router } from "express";
+import AppRouter from "../../lib/router";
 import { isAuthorized } from "../../middlewares/isAuthorized";
 import { createProject, deleteProject, getById, getProjects } from "./project.handlers";
 
-export const router = Router();
+export const router = new AppRouter('projects');
 
-router.post('/', isAuthorized, createProject);
-router.get('/', isAuthorized, getProjects);
-router.get('/:id', getById);
-router.delete('/:id', isAuthorized, deleteProject);
+// router.getInstance().post('/', isAuthorized, createProject);
+// router.getInstance().get('/', isAuthorized, getProjects);
+// router.getInstance().get('/:id', getById);
+// router.getInstance().delete('/:id', isAuthorized, deleteProject);

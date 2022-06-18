@@ -1,12 +1,22 @@
-import { Router } from "express";
-import { isAuthorized } from "../../middlewares/isAuthorized";
-import { login, register, uploadFile } from './admin.handlers'
 import multer from 'multer';
 
-export const router = Router();
+import { isAuthorized } from "../../middlewares/isAuthorized";
+import AppRouter from "../../lib/router";
+import { RegisterHandler } from "./handlers/register.handler";
+import { LoginHandler } from "./handlers/login.handler";
+import { UploadFileHandler } from "./handlers/upload-file.handler";
+
 const upload = multer({ dest: 'uploads/' });
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/upload', isAuthorized, upload.single('image'), uploadFile);
+export const router = new AppRouter('/admin');
 
+router.post('/register')
+  .handler(new RegisterHandler());
+
+router.post('/login')
+  .handler(new LoginHandler());
+
+router.post('/upload')
+  .use(isAuthorized)
+  .use(upload.single('image'))
+  .handler(new UploadFileHandler());

@@ -1,20 +1,26 @@
-import express from 'express';
-import { connect } from './database/db';
-import { router as adminRouter } from './module/admin/admin.router';
-import { router as projectRouter } from './module/projects/project.router';
+import express from "express";
 
-const app = express();
-const port = process.env.PORT || 3000;
-app.use(express.json());
+import { connect } from "./database/db";
+import App from "./lib/app";
 
-app.use(express.static('public'));
-app.use('/admin', adminRouter);
-app.use('/projects', projectRouter);
+import { router as adminRouter } from "./module/admin/admin.router";
+import { router as projectRouter } from "./module/projects/project.router";
+
+const app = new App();
+
+const port = process.env.PORT || "3000";
+
+app.registerMiddleware(express.json());
+app.registerMiddleware(express.static("public"));
+app.registerRouter(adminRouter);
+app.registerRouter(projectRouter);
 
 export function start() {
-    connect().then(() => {
-        app.listen(port, () => {
-            console.log("Listening on port 3000.")
-        });
+  connect()
+    .then(() => {
+      return app.start(port);
     })
+    .then(() => {
+      console.log("Listening on port 3000.");
+    });
 }
